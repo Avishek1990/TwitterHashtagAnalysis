@@ -15,7 +15,7 @@ import pandas as pd
 import json
 import warnings
 warnings.simplefilter('ignore')
-import twitter
+# import twitter
 import datetime as dt
 
 def twitter_APIAuth():
