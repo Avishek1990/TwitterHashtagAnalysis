@@ -1,13 +1,13 @@
 # import libraries
 
-import sys
-import subprocess
+# import sys
+# import subprocess
 
-# implement pip as a subprocess:
-subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'tweepy'])
-subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'twitter'])
-subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'pandas'])
-subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'numpy'])
+# # implement pip as a subprocess:
+# subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'tweepy'])
+# subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'twitter'])
+# subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'pandas'])
+# subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'numpy'])
 
 import os
 import tweepy as tw
