@@ -16,6 +16,10 @@ import json
 import warnings
 warnings.simplefilter('ignore')
 # import twitter
+import boto3
+from botocore.exceptions import ClientError
+import os
+import logging
 import datetime as dt
 
 def twitter_APIAuth():
@@ -29,6 +33,7 @@ def twitter_APIAuth():
 
 
 class getTweets(object):
+    
     def __init__(self):
         self.api = tw.API(twitter_APIAuth(), wait_on_rate_limit=True)
         print(self.api)
@@ -46,6 +51,9 @@ class getTweets(object):
         print(self.date_since)
         print(self.date_until)
 
+    def S3Connect(self):
+
+        pass
 
     def searchTweets(self):
 
@@ -66,7 +74,7 @@ class getTweets(object):
         
         i = 0
 
-        for tweet in tweets.items():
+        for tweet in tweets.items(100):
             # print(tweet)
             tweets_Crypto.loc[i,'text'] = tweet._json['full_text']
             # print(tweet._json['full_text'])
@@ -84,11 +92,40 @@ class getTweets(object):
             # print(json.loads(tweet.Status.json))
             print(i,end='\r')
             i+=1
-            if i%1000 == 0:
+            if i%10 == 0:
                 tweets_Crypto['created_at'] = tweets_Crypto['created_at'].apply(lambda a: pd.to_datetime(a)) 
                 tweets_Crypto.to_csv('CheckPointTweets.csv')
                 # tweets_Crypto.head()
+
+                self.upload_file('CheckPointTweets.csv','twitterdatacrypto')
         
         return tweets_Crypto
+
+    def upload_file(self,file_name, bucket, object_name=None):
+        """Upload a file to an S3 bucket
+
+        :param file_name: File to upload
+        :param bucket: Bucket to upload to
+        :param object_name: S3 object name. If not specified then file_name is used
+        :return: True if file was uploaded, else False
+        """
+        AWS_ACCESS_KEY_ID = 'AKIAZRVF4KZBP3TR5F4P'
+        AWS_SECRET_ACCESS_KEY = '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'
+
+        # conn = boto3.conne(AWS_ACCESS_KEY_ID,
+        # AWS_SECRET_ACCESS_KEY)
+
+        # If S3 object_name was not specified, use file_name
+        if object_name is None:
+            object_name = os.path.basename(file_name)
+
+        # Upload the file
+        s3_client = boto3.resource('s3')
+        try:
+            response = s3_client.Bucket(bucket).put_object(Key = 'checkpoint.csv',Body=file_name)
+        except ClientError as e:
+            logging.error(e)
+            return False
+        return True
 
 
