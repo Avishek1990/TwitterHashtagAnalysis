@@ -120,7 +120,7 @@ class getTweets(object):
             object_name = os.path.basename(file_name)
 
         # Upload the file
-        s3_client = boto3.resource('s3')
+        s3_client = boto3.resource('s3',AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY)
         try:
             response = s3_client.Bucket(bucket).put_object(Key = 'checkpoint.csv',Body=file_name)
         except ClientError as e:
